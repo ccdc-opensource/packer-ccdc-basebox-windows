@@ -90,7 +90,6 @@ source "vsphere-iso" "server" {
   datastore            = var.vmware_center_datastore
   guest_os_type        = var.vsphere_guest_os_type
   cluster              = var.vmware_center_cluster_name
-  guest_os_type        = var.vmware_guest_os_type
   iso_checksum         = var.iso_checksum
   iso_url              = var.iso_url
   cd_files             = var.cd_files
