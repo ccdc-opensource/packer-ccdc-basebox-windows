@@ -146,12 +146,12 @@ build {
     ]
   }
 
-  post-processors {
+  # post-processors {
 
-    post-processor "vagrant" {
-      output               = "${var.output_directory}/${ var.vagrant_box }.${ replace(replace(replace(source.type, "-iso", ""), "hyper-v", "hyperv"), "vmware", "vmware_desktop") }.box"
-      vagrantfile_template = "Vagrantfile-uefi.template"
-    }
+  #   post-processor "vagrant" {
+  #     output               = "${var.output_directory}/${ var.vagrant_box }.${ replace(replace(replace(source.type, "-iso", ""), "hyper-v", "hyperv"), "vmware", "vmware_desktop") }.box"
+  #     vagrantfile_template = "Vagrantfile-uefi.template"
+  #   }
 
     # // Once box has been created, upload it to Artifactory
     # post-processor "shell-local" {
@@ -166,5 +166,5 @@ build {
     #     "ccdc-vagrant-repo/${var.vagrant_box}.${formatdate("YYYYMMDD", timestamp())}.0.${replace(replace(replace(source.type, "-iso", ""), "hyper-v", "hyperv"), "vmware", "vmware_desktop")}.box"
     #   ])
     # }
-  }
+  # }
 }
