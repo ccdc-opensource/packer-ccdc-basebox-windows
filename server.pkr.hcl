@@ -1,63 +1,4 @@
-variable "iso_url" {
-  type    = string
-  default = "https://software-download.microsoft.com/download/sg/20348.169.210806-2348.fe_release_svc_refresh_SERVER_EVAL_x64FRE_en-us.iso"
-}
-
-variable "iso_checksum" {
-  type    = string
-  default = "sha256:4f1457c4fe14ce48c9b2324924f33ca4f0470475e6da851b39ccbf98f44e7852"
-}
-
-
-variable "vagrant_box" {
-  type    = string
-  default = "ccdc-basebox/windows-server-2022"
-}
-
-variable "system_disk_size" {
-  type    = string
-  default = "80000"
-  description = "System disk size in megabytes."
-}
-
-variable "x_mirror_disk_size" {
-  type    = string
-  default = "200000"
-  description = "Size in megabytes for x_mirror disk."
-}
-
-variable "builds_disk_size" {
-  type    = string
-  default = "300000"
-  description = "Size in megabytes for builds disk."
-}
-
-variable "hyperv_switch_name" {
-  type    = string
-  default = "Default Switch"
-}
-
-variable "hyperv_vlan_id" {
-  type    = string
-  default = env("HYPERV_VLAN_ID")
-}
-
-variable "output_directory" {
-  type    = string
-  default = "${env("PWD")}/output/"
-}
-
-variable "artifactory_api_key" {
-  type    = string
-  default = env("ARTIFACTORY_API_KEY")
-}
-
-variable "artifactory_username" {
-  type    = string
-  default = env("USER")
-}
-
-source "virtualbox-iso" "windows-2022" {
+source "virtualbox-iso" "server" {
   firmware                  = "efi"
   gfx_accelerate_3d         = true
   gfx_controller            = "vboxsvga"
@@ -97,7 +38,7 @@ source "virtualbox-iso" "windows-2022" {
   winrm_timeout    = "10m"
 }
 
-source "vmware-iso" "windows-2022" {
+source "vmware-iso" "server" {
   disk_type_id                    = 0
   disk_adapter_type               = "pvscsi"
   guest_os_type                   = "windows2019srv-64"
@@ -132,7 +73,7 @@ source "vmware-iso" "windows-2022" {
   winrm_timeout    = "10m"
 }
 
-source "hyperv-iso" "windows-2022" {
+source "hyperv-iso" "server" {
   generation        = 2
   boot_order        = ["SCSI:0:0"]
   first_boot_device = "DVD"
@@ -162,6 +103,45 @@ source "hyperv-iso" "windows-2022" {
   winrm_timeout    = "10m"
 }
 
+source "vsphere-iso" "server" {
+
+  memory               = 4096
+  cpu                  = 2
+  vcenter_server       = var.vmware_center_host
+  host                 = var.vmware_center_esxi_host
+  username             = "${var.vmware_center_username}"
+  password             = "${var.vmware_center_password}"
+  insecure_connection  = false
+  datacenter           = var.vmware_center_datacenter
+  datastore            = var.vmware_center_datastore
+  cluster              = var.vmware_center_cluster_name
+  guest_os_type        = var.vmware_guest_os_type
+  iso_checksum         = var.iso_checksum
+  iso_url              = var.iso_url
+  cd_files             = var.cd_files
+  disk_controller_type = ["pvscsi"]
+  storage {
+      disk_size = "${var.disk_size}"
+      disk_thin_provisioned = true
+  }
+  network_adapters {
+      network = "${var.vmware_center_vm_network}"
+      network_card = "vmxnet3"
+  }
+  boot_wait            = "2s"
+  boot_command         = ["<enter>"]
+  shutdown_command     = "shutdown /s /t 0 /f /d p:4:1 /c \"Packer Shutdown\""
+  communicator         = "winrm"
+  winrm_username       = "vagrant"
+  winrm_password       = "vagrant"
+  winrm_use_ssl        = "false"
+  winrm_insecure       = "true"
+  winrm_use_ntlm       = "true"
+  winrm_timeout        = "10m"
+
+
+}
+
 // source "vsphere-iso" "windows-2022" {
 // https://www.packer.io/plugins/builders/vsphere/vsphere-iso
 // }
@@ -175,9 +155,9 @@ build {
   ]
 
   provisioner "ansible" {
-    playbook_file = "./ansible_provisioning/playbook.yaml"
-    galaxy_file = "./ansible_provisioning/requirements.yaml"
-    roles_path = "./ansible_provisioning/roles"
+    playbook_file = "${var.ansible_playbook_file}"
+    galaxy_file = "${var.ansible_requirements_file}"
+    roles_path = "${var.ansible_roles_path}"
     galaxy_force_install = true
     user            = "vagrant"
     use_proxy       = false
@@ -203,18 +183,18 @@ build {
       vagrantfile_template = "Vagrantfile-uefi.template"
     }
 
-    // Once box has been created, upload it to Artifactory
-    post-processor "shell-local" {
-      command = join(" ", [
-        "jf rt upload",
-        "--target-props \"box_name=${ var.vagrant_box };box_provider=${replace(replace(replace(source.type, "-iso", ""), "hyper-v", "hyperv"), "vmware", "vmware_desktop")};box_version=${ formatdate("YYYYMMDD", timestamp()) }.0\"",
-        "--retries 10",
-        "--access-token ${ var.artifactory_api_key }",
-        "--user ${ var.artifactory_username }",
-        "--url \"https://artifactory.ccdc.cam.ac.uk/artifactory\"",
-        "${var.output_directory}/${var.vagrant_box}.${replace(replace(replace(source.type, "-iso", ""), "hyper-v", "hyperv"), "vmware", "vmware_desktop")}.box",
-        "ccdc-vagrant-repo/${var.vagrant_box}.${formatdate("YYYYMMDD", timestamp())}.0.${replace(replace(replace(source.type, "-iso", ""), "hyper-v", "hyperv"), "vmware", "vmware_desktop")}.box"
-      ])
-    }
+    # // Once box has been created, upload it to Artifactory
+    # post-processor "shell-local" {
+    #   command = join(" ", [
+    #     "jf rt upload",
+    #     "--target-props \"box_name=${ var.vagrant_box };box_provider=${replace(replace(replace(source.type, "-iso", ""), "hyper-v", "hyperv"), "vmware", "vmware_desktop")};box_version=${ formatdate("YYYYMMDD", timestamp()) }.0\"",
+    #     "--retries 10",
+    #     "--access-token ${ var.artifactory_api_key }",
+    #     "--user ${ var.artifactory_username }",
+    #     "--url \"https://artifactory.ccdc.cam.ac.uk/artifactory\"",
+    #     "${var.output_directory}/${var.vagrant_box}.${replace(replace(replace(source.type, "-iso", ""), "hyper-v", "hyperv"), "vmware", "vmware_desktop")}.box",
+    #     "ccdc-vagrant-repo/${var.vagrant_box}.${formatdate("YYYYMMDD", timestamp())}.0.${replace(replace(replace(source.type, "-iso", ""), "hyper-v", "hyperv"), "vmware", "vmware_desktop")}.box"
+    #   ])
+    # }
   }
 }
