@@ -79,8 +79,8 @@ source "hyperv-iso" "server" {
 
 source "vsphere-iso" "server" {
 
-  ram                  = 4096
-  cpus                 = 2
+  RAM                  = 4096
+  CPUs                 = 2
   vcenter_server       = var.vmware_center_host
   host                 = var.vmware_center_esxi_host
   username             = "${var.vmware_center_username}"
