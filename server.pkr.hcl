@@ -92,7 +92,20 @@ source "vsphere-iso" "server" {
   cluster              = var.vmware_center_cluster_name
   iso_checksum         = var.iso_checksum
   iso_url              = var.iso_url
-  cd_files             = var.cd_files
+  cd_files = [
+    "${path.cwd}/scripts/"
+  ]
+  cd_content = {
+    "autounattend.xml" = templatefile("${abspath(path.root)}/answer_files/windows-2022/autounattend.pkrtpl.hcl", {
+      build_username       = "vagrant"
+      build_password       = "vagrant"
+      vm_inst_os_language  = "en-US"
+      vm_inst_os_keyboard  = "en-US"
+      vm_guest_os_language = "en-US"
+      vm_guest_os_keyboard = "en-US"
+      vm_guest_os_timezone = "UTC"
+    })
+  }
   disk_controller_type = ["pvscsi"]
   storage {
       disk_size = "${var.disk_size}"
