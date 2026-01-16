@@ -78,7 +78,7 @@ source "hyperv-iso" "server" {
 }
 
 source "vsphere-iso" "server" {
-
+  vm_name              = var.vmware_center_vm_name
   RAM                  = 4096
   CPUs                 = 2
   vcenter_server       = var.vmware_center_host
