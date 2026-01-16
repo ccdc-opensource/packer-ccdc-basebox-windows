@@ -8,22 +8,10 @@ variable "iso_checksum" {
   default = "${env("ISO_CHECKSUM")}"
 }
 
-variable "system_disk_size" {
+variable "disk_size" {
   type    = string
   default = "80000"
   description = "System disk size in megabytes."
-}
-
-variable "x_mirror_disk_size" {
-  type    = string
-  default = "200000"
-  description = "Size in megabytes for x_mirror disk."
-}
-
-variable "builds_disk_size" {
-  type    = string
-  default = "300000"
-  description = "Size in megabytes for builds disk."
 }
 
 variable "hyperv_switch_name" {

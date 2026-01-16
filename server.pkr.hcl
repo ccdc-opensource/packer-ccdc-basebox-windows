@@ -79,8 +79,8 @@ source "hyperv-iso" "server" {
 
 source "vsphere-iso" "server" {
 
-  memory               = 4096
-  cpu                  = 2
+  ram                  = 4096
+  cpus                 = 2
   vcenter_server       = var.vmware_center_host
   host                 = var.vmware_center_esxi_host
   username             = "${var.vmware_center_username}"
@@ -88,6 +88,7 @@ source "vsphere-iso" "server" {
   insecure_connection  = false
   datacenter           = var.vmware_center_datacenter
   datastore            = var.vmware_center_datastore
+  guest_os_type        = var.vsphere_guest_os_type
   cluster              = var.vmware_center_cluster_name
   guest_os_type        = var.vmware_guest_os_type
   iso_checksum         = var.iso_checksum
