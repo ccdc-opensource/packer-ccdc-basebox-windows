@@ -116,15 +116,12 @@ source "vsphere-iso" "server" {
 
 }
 
-// source "vsphere-iso" "windows-2022" {
-// https://www.packer.io/plugins/builders/vsphere/vsphere-iso
-// }
-
 build {
 
   sources = [
-    "source.vmware-iso.windows-2022",
-    "source.hyperv-iso.windows-2022"
+    "source.vmware-iso.server-2022",
+    "source.vsphere-iso.server-2022",
+    "source.hyperv-iso.server-2022"
   ]
 
   provisioner "ansible" {
