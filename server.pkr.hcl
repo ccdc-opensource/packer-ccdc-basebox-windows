@@ -1,41 +1,15 @@
-source "virtualbox-iso" "server" {
-  firmware                  = "efi"
-  gfx_accelerate_3d         = true
-  gfx_controller            = "vboxsvga"
-  gfx_vram_size             = 128
-  guest_additions_interface = "sata"
-  guest_additions_mode      = "disable"
-  guest_os_type             = "Windows2019_64"
-  hard_drive_interface      = "sata"
-  hard_drive_nonrotational  = false
-  hard_drive_discard        = false
-  iso_interface             = "sata"
-  nic_type                  = "82540EM"
-  usb                       = true
-  vboxmanage = [
-    ["storagectl", "{{ .Name }}", "--name", "IDE Controller", "--remove"],
-  ]
-
-  // Settings shared between all builders
-  cpus             = 2
-  memory           = 4096
-  iso_url          = var.iso_url
-  iso_checksum     = var.iso_checksum
-  disk_size        = var.system_disk_size
-  disk_additional_size = [ var.x_mirror_disk_size, var.builds_disk_size ]
-  headless         = false
-  cd_files         = ["answer_files/windows-2022/autounattend.xml"]
-  boot_wait        = "2s"
-  boot_command     = ["<enter>"]
-  shutdown_command = "shutdown /s /t 0 /f /d p:4:1 /c \"Packer Shutdown\""
-  output_directory = "${ var.output_directory }/${ var.vagrant_box }.${ source.type }"
-  communicator     = "winrm"
-  winrm_username   = "vagrant"
-  winrm_password   = "vagrant"
-  winrm_use_ssl    = "false"
-  winrm_insecure   = "true"
-  winrm_use_ntlm   = "true"
-  winrm_timeout    = "10m"
+packer {
+  required_version = ">= 1.12.0"
+  required_plugins {
+    vsphere = {
+      source  = "github.com/hashicorp/vsphere"
+      version = ">= 2.0.0"
+    }
+    ansible = {
+      version = ">= 1.1.0"
+      source = "github.com/hashicorp/ansible"
+    }
+  }
 }
 
 source "vmware-iso" "server" {
