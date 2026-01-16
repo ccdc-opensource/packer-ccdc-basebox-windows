@@ -93,5 +93,6 @@ variable "vmware_center_vm_network" {
   type    = string
   default = "${env("VMWARECENTER_VM_NETWORK")}"
 }
-
+variable "vsphere_guest_os_type" {}
 variable "vagrant_box" {}
+variable "cd_files" {}
