@@ -92,7 +92,7 @@ source "vsphere-iso" "server" {
   cluster              = var.vmware_center_cluster_name
   iso_checksum         = var.iso_checksum
   iso_url              = var.iso_url
-  iso_paths            = "[] /vmimages/tools-isoimages/windows.iso"
+  iso_paths            = ["[] /vmimages/tools-isoimages/windows.iso"]
   cd_files = [
     "${path.cwd}/scripts/"
   ]
