@@ -119,9 +119,9 @@ source "vsphere-iso" "server" {
 build {
 
   sources = [
-    "source.vmware-iso.server",
-    "source.vsphere-iso.server",
-    "source.hyperv-iso.server"
+    # "source.vmware-iso.server",
+    "source.vsphere-iso.server"
+    # "source.hyperv-iso.server"
   ]
 
   provisioner "ansible" {
