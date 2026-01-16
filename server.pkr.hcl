@@ -124,8 +124,7 @@ build {
 
   sources = [
     "source.vmware-iso.windows-2022",
-    "source.hyperv-iso.windows-2022",
-    "source.virtualbox-iso.windows-2022",
+    "source.hyperv-iso.windows-2022"
   ]
 
   provisioner "ansible" {
