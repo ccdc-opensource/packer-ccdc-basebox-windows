@@ -98,8 +98,8 @@ source "vsphere-iso" "server" {
   ]
   cd_content = {
     "autounattend.xml" = templatefile("${abspath(path.root)}/answer_files/windows-2022/autounattend.pkrtpl.hcl", {
-      build_username       = "vagrant"
-      build_password       = "vagrant"
+      vagrant_username       = var.vagrant_username
+      vagrant_password       = var.vagrant_password
       vm_inst_os_language  = "en-US"
       vm_inst_os_keyboard  = "en-US"
       vm_guest_os_language = "en-US"

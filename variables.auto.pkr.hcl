@@ -50,7 +50,15 @@ variable "ansible_roles_path" {
   type    = string
   default = "ansible_provisioning/roles"
 }
-
+variable "vagrant_username" {
+  type    = string
+  default = env("VAGRANT_USERNAME")
+}
+variable "vagrant_password" {
+  type      = string
+  default   = env("VAGRANT_PASSWORD")
+  sensitive = true
+}
 // VSphere settings
 variable "vmware_center_cluster_name" {
   type    = string
