@@ -120,8 +120,8 @@ source "vsphere-iso" "server" {
   boot_command         = ["<enter>"]
   shutdown_command     = "shutdown /s /t 0 /f /d p:4:1 /c \"Packer Shutdown\""
   communicator         = "winrm"
-  winrm_username       = "vagrant"
-  winrm_password       = "vagrant"
+  winrm_username       = var.vagrant_username
+  winrm_password       = var.vagrant_password
   winrm_use_ssl        = "false"
   winrm_insecure       = "true"
   winrm_use_ntlm       = "true"
