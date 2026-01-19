@@ -136,11 +136,11 @@
       <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
          <AutoLogon>
             <Password>
-               <Value>${build_password}</Value>
+               <Value>${vagrant_password}</Value>
                <PlainText>true</PlainText>
             </Password>
             <Enabled>true</Enabled>
-            <Username>${build_username}</Username>
+            <Username>${vagrant_username}</Username>
          </AutoLogon>
          <OOBE>
             <HideEULAPage>true</HideEULAPage>
@@ -153,18 +153,18 @@
          </OOBE>
          <UserAccounts>
             <AdministratorPassword>
-               <Value>${build_password}</Value>
+               <Value>${vagrant_password}</Value>
                <PlainText>true</PlainText>
             </AdministratorPassword>
             <LocalAccounts>
                <LocalAccount wcm:action="add">
                   <Password>
-                     <Value>${build_password}</Value>
+                     <Value>${vagrant_password}</Value>
                      <PlainText>true</PlainText>
                   </Password>
                   <Group>administrators</Group>
-                  <DisplayName>${build_username}</DisplayName>
-                  <Name>${build_username}</Name>
+                  <DisplayName>${vagrant_username}</DisplayName>
+                  <Name>${vagrant_username}</Name>
                   <Description>Build Account</Description>
                </LocalAccount>
             </LocalAccounts>
