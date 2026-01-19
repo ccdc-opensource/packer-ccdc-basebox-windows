@@ -146,12 +146,14 @@ build {
     user            = "vagrant"
     use_proxy       = false
     extra_arguments = [
-      // "-vvv",
+      "-vvv",
       "-e",
       "ansible_winrm_server_cert_validation=ignore",
       "-e",
       "ansible_winrm_scheme=http",
       "-e",
+      "ansible_winrm_transport=ntlm",
+      "-e", 
       "ansible_become_method=runas",
       "-e",
       "ansible_become_user=System",
