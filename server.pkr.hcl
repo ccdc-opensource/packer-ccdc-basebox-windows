@@ -86,6 +86,7 @@ source "vsphere-iso" "server" {
   username             = "${var.vmware_center_username}"
   password             = "${var.vmware_center_password}"
   insecure_connection  = false
+  firmware             = "efi"
   datacenter           = var.vmware_center_datacenter
   datastore            = var.vmware_center_datastore
   guest_os_type        = var.vsphere_guest_os_type

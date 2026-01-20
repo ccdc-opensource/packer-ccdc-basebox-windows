@@ -17,32 +17,42 @@
                <DiskID>0</DiskID>
                <WillWipeDisk>true</WillWipeDisk>
                <CreatePartitions>
-                  <!-- System Reserved partition for BIOS -->
+                  <!-- EFI System Partition (ESP) - 260 MB for EFI -->
                   <CreatePartition wcm:action="add">
                      <Order>1</Order>
-                     <Type>Primary</Type>
-                     <Size>350</Size>
+                     <Type>EFI</Type>
+                     <Size>260</Size>
+                  </CreatePartition>
+                  <!-- Microsoft Reserved Partition (MSR) - 16 MB for EFI -->
+                  <CreatePartition wcm:action="add">
+                     <Order>2</Order>
+                     <Type>MSR</Type>
+                     <Size>16</Size>
                   </CreatePartition>
                   <!-- Windows partition -->
                   <CreatePartition wcm:action="add">
-                     <Order>2</Order>
+                     <Order>3</Order>
                      <Type>Primary</Type>
                      <Extend>true</Extend>
                   </CreatePartition>
                </CreatePartitions>
                <ModifyPartitions>
-                  <!-- System Reserved partition -->
+                  <!-- EFI System Partition -->
                   <ModifyPartition wcm:action="add">
                      <Order>1</Order>
                      <PartitionID>1</PartitionID>
-                     <Label>System Reserved</Label>
-                     <Format>NTFS</Format>
-                     <Active>true</Active>
+                     <Label>EFI</Label>
+                     <Format>FAT32</Format>
                   </ModifyPartition>
-                  <!-- Windows partition -->
+                  <!-- Microsoft Reserved Partition (no modification needed) -->
                   <ModifyPartition wcm:action="add">
                      <Order>2</Order>
                      <PartitionID>2</PartitionID>
+                  </ModifyPartition>
+                  <!-- Windows partition -->
+                  <ModifyPartition wcm:action="add">
+                     <Order>3</Order>
+                     <PartitionID>3</PartitionID>
                      <Label>OS</Label>
                      <Letter>C</Letter>
                      <Format>NTFS</Format>
@@ -104,34 +114,6 @@
          <SkipAutoActivation>true</SkipAutoActivation>
       </component>
      </settings>
-   <settings pass="offlineServicing">
-      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-LUA-Settings" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
-         <EnableLUA>false</EnableLUA>
-      </component>
-   </settings>
-   <settings pass="generalize">
-      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-Security-SPP" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
-         <SkipRearm>1</SkipRearm>
-      </component>
-   </settings>
-   <settings pass="specialize">
-      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
-         <OEMInformation>
-            <HelpCustomized>false</HelpCustomized>
-         </OEMInformation>
-         <TimeZone>${vm_guest_os_timezone}</TimeZone>
-         <RegisteredOwner />
-      </component>
-      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-ServerManager-SvrMgrNc" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
-         <DoNotOpenServerManagerAtLogon>true</DoNotOpenServerManagerAtLogon>
-      </component>
-      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-OutOfBoxExperience" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
-         <DoNotOpenInitialConfigurationTasksAtLogon>true</DoNotOpenInitialConfigurationTasksAtLogon>
-      </component>
-      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-Security-SPP-UX" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
-         <SkipAutoActivation>true</SkipAutoActivation>
-      </component>
-   </settings>
    <settings pass="oobeSystem">
       <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
          <AutoLogon>
