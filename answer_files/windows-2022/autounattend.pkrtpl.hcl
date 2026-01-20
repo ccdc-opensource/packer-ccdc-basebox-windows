@@ -79,7 +79,7 @@
             <FullName>vagrant</FullName>
             <Organization>vagrant</Organization>
             <ProductKey>
-               <Key>VDYBN-27WPP-V4HQT-9VMD4-VMK7H</Key>
+               <Key></Key>
                <WillShowUI>OnError</WillShowUI>
             </ProductKey>
          </UserData>
