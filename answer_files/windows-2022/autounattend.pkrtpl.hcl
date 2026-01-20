@@ -70,7 +70,7 @@
                </InstallFrom>
                <InstallTo>
                   <DiskID>0</DiskID>
-                  <PartitionID>2</PartitionID>
+                  <PartitionID>3</PartitionID>
                </InstallTo>
             </OSImage>
          </ImageInstall>
