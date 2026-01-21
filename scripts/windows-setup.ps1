@@ -35,18 +35,11 @@ try {
     }
     Write-Log "WinRM quickconfig completed"
 
-    # Enable unencrypted WinRM (required for Ansible)
-    Write-Log "Enabling unencrypted WinRM traffic..."
-    winrm set winrm/config/service '@{AllowUnencrypted="true"}'
+    # Enable CredSSP authentication
+    Write-Log "Enabling CredSSP authentication for WinRM..."
+    Enable-WSManCredSSP -Role Server -Force
     if ($LASTEXITCODE -ne 0) {
-        throw "Failed to enable unencrypted WinRM"
-    }
-
-    # Enable basic authentication
-    Write-Log "Enabling basic authentication for WinRM..."
-    winrm set winrm/config/service/auth '@{Basic="true"}'
-    if ($LASTEXITCODE -ne 0) {
-        throw "Failed to enable basic authentication"
+        throw "Failed to enable CredSSP authentication"
     }
     Write-Log "WinRM configured successfully"
 
