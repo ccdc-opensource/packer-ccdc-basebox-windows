@@ -80,7 +80,7 @@
             <Organization>vagrant</Organization>
             <ProductKey>
                <Key></Key>
-               <WillShowUI>OnError</WillShowUI>
+               <WillShowUI>Never</WillShowUI>
             </ProductKey>
          </UserData>
          <EnableFirewall>false</EnableFirewall>
